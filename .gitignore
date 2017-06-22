@@ -1,2 +1,4 @@
 node_modules
-tmp
+alltemp
+tmp-*
+.DS_Store
