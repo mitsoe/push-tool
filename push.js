@@ -6,18 +6,16 @@ const repos = [
     `https://mitch_lamers@bitbucket.org/mitch_lamers/ftp.git`,
     `https://mitch_lamers@bitbucket.org/mitch_lamers/woezik.git`
 ]
-
 const files = [
     `example.js`
 ]
 
-const TEMP_FOLDER = `./tmp`;
+init();
 
-init(TEMP_FOLDER);
-
-function init(aTempFolder) {
+function init() {
+    const tempFolder = `./tmp`;
     repos.forEach((element, index) => {
-        clone(element, `example.js`, `${aTempFolder}-${index}`);
+        clone(element, `example.js`, `${tempFolder}-${index}`);
     })
 }
 
