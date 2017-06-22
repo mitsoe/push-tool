@@ -3,12 +3,12 @@ const fs = require('fs-extra')
 const rimraf = require('rimraf');
 
 const repos = [
-    `https://mitch_lamers@bitbucket.org/mitch_lamers/ftp.git`,
-    `https://mitch_lamers@bitbucket.org/mitch_lamers/woezik.git`
+    `https://username@bitbucket.org/username/repository.git`,
+    `https://username@bitbucket.org/username/repository.git`
 ]
 const files = [
-    `example.js`,
-    `bla.js`
+    `newfile.js`,
+    `newfile2.js`
 ]
 
 init();
