@@ -7,43 +7,52 @@ const repos = [
     `https://mitch_lamers@bitbucket.org/mitch_lamers/woezik.git`
 ]
 const files = [
-    `example.js`
+    `example.js`,
+    `bla.js`
 ]
 
 init();
 
 function init() {
-    const tempFolder = `./tmp`;
+    const tempFolder = `./alltemp/tmp`;
     repos.forEach((element, index) => {
-        clone(element, `example.js`, `${tempFolder}-${index}`);
+        clone(element, `${tempFolder}-${index}`);
     })
 }
 
-function clone(aRepo, aFileName, aTempFolder) {
+function clone(aRepo, aTempFolder) {
     rimraf(aTempFolder, function () {
         simpleGit().clone(aRepo, aTempFolder, (result) => {
-            copyFile(aFileName, aTempFolder);
+            copyFile(aTempFolder);
         });
     });
 }
 
-function copyFile(aFileName, aTempFolder) {
-    const newFile = `${aTempFolder}/${aFileName}`;
-    rimraf(newFile, function () {
-        fs.copy(`./${aFileName}`, newFile)
-            .then(() => {
-                addToGit(aTempFolder, aFileName);
-            })
-            .catch(err => console.error(err))
+function copyFile(aTempFolder) {
+    files.forEach((fileName, index) => {
+        var newFile = `${aTempFolder}/${fileName}`;
+        rimraf(newFile, function () {
+            fs.copy(`./${fileName}`, newFile)
+                .then(() => {
+                    var lastFile = files.length == index + 1;
+                    addToGit(aTempFolder, fileName, lastFile);
+                })
+                .catch(err => {
+                    console.error('Copy failed, remove folder')
+                    removeFolder(aTempFolder);
+                })
+        });
     });
 }
 
-function addToGit(aTempFolder, aFileName) {
+function addToGit(aTempFolder, aFileName, aIsLastFile) {
     const gitInDir = simpleGit(aTempFolder);
     gitInDir.add(aFileName, (result) => {
-        gitInDir.commit(`update ${aFileName}`).push('origin', 'master', (succes) => {
-            removeFolder(aTempFolder);
-        });
+        if (aIsLastFile) {
+            gitInDir.commit(`update from push tool`).push('origin', 'master', (succes) => {
+                removeFolder(aTempFolder);
+            });
+        }
     });
 }
 
