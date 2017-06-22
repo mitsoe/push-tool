@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/mitsoe/push-tool/issues"
   },
-  "homepage": "https://github.com/mitsoe/push-tool#readme"
+  "homepage": "https://github.com/mitsoe/push-tool#readme",
+  "devDependencies": {
+    "simple-git": "1.73.0"
+  }
 }
