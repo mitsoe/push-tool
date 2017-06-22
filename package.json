@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mitsoe/push-tool#readme",
   "devDependencies": {
+    "rimraf": "2.6.1",
     "simple-git": "1.73.0"
   }
 }
