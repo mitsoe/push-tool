@@ -2,40 +2,49 @@ const simpleGit = require('simple-git');
 const fs = require('fs-extra')
 const rimraf = require('rimraf');
 
-const repo = `https://xx@bitbucket.org/user/repo.git`;
-const tempFolder = `./tmp`;
-const fileName = `example.js`;
-const newFile = `${tempFolder}/${fileName}`;
+const repos = [
+    `https://mitch_lamers@bitbucket.org/mitch_lamers/ftp.git`,
+    `https://mitch_lamers@bitbucket.org/mitch_lamers/woezik.git`
+]
 
-clone(repo);
+const files = [
+    `example.js`
+]
 
-function clone(aRepo) {
-    rimraf(tempFolder, function () {
-        simpleGit().clone(repo, tempFolder, (result) => {
-            copyFile();
+const TEMP_FOLDER = `./tmp`;
+
+init(TEMP_FOLDER);
+
+function init(aTempFolder) {
+    repos.forEach((element, index) => {
+        clone(element, `example.js`, `${aTempFolder}-${index}`);
+    })
+}
+
+function clone(aRepo, aFileName, aTempFolder) {
+    rimraf(aTempFolder, function () {
+        simpleGit().clone(aRepo, aTempFolder, (result) => {
+            copyFile(aFileName, aTempFolder);
         });
     });
 }
 
-function copyFile() {
+function copyFile(aFileName, aTempFolder) {
+    const newFile = `${aTempFolder}/${aFileName}`;
     rimraf(newFile, function () {
-        fs.copy(`./${fileName}`, newFile)
+        fs.copy(`./${aFileName}`, newFile)
             .then(() => {
-                addToGit();
+                addToGit(aTempFolder, aFileName);
             })
             .catch(err => console.error(err))
     });
 }
 
-function addToGit() {
-    const gitInDir = simpleGit('./tmp');
-
-    gitInDir.add(fileName, (result) => {
-        gitInDir.commit(`update ${fileName}`).push('origin', 'master', (succes) => {
-            removeFolder(tempFolder);
-        }, (error) => {
-            console.error('Commit or push failed');
-            removeFolder(tempFolder);
+function addToGit(aTempFolder, aFileName) {
+    const gitInDir = simpleGit(aTempFolder);
+    gitInDir.add(aFileName, (result) => {
+        gitInDir.commit(`update ${aFileName}`).push('origin', 'master', (succes) => {
+            removeFolder(aTempFolder);
         });
     });
 }
