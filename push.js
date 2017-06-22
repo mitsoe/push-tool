@@ -4,7 +4,7 @@ const rimraf = require('rimraf');
 
 const repos = [
     `https://mitch_lamers@bitbucket.org/mitch_lamers/ftp.git`,
-    // `https://mitch_lamers@bitbucket.org/mitch_lamers/woezik.git`
+    `https://mitch_lamers@bitbucket.org/mitch_lamers/woezik.git`
 ]
 const files = [
     `example.js`,
@@ -48,10 +48,11 @@ function copyFile(aTempFolder) {
 function addToGit(aTempFolder, aFileName, aIsLastFile) {
     const gitInDir = simpleGit(aTempFolder);
     gitInDir.add(aFileName, (result) => {
-        console.log(`Added ${aFileName} ${aIsLastFile}`)
-        //     gitInDir.commit(`update ${aFileName}`).push('origin', 'master', (succes) => {
-        //         removeFolder(aTempFolder);
-        //     });
+        if (aIsLastFile) {
+            gitInDir.commit(`update from push tool`).push('origin', 'master', (succes) => {
+                removeFolder(aTempFolder);
+            });
+        }
     });
 }
 
